@@ -1,7 +1,33 @@
 import Vue from 'vue'
-import App from './App.vue'
+import Router from 'vue-router'
 
-new Vue({
-  el: '#app',
-  render: h => h(App)
+import App from './App.vue'
+import { routes } from './router/routes';
+
+
+var seneca;
+seneca = Seneca()
+    .test('print')
+    .client({type:'browser', pin:'a:*'})
+    .client({type:'browser', pin:'b:*'})
+
+const router =  new Router({
+    routes,
+    mode: 'history'
+});
+
+Vue.use(Router)
+Vue.use(seneca)
+
+
+/* eslint-disable no-new */
+const app = new Vue({
+    router,
+    seneca,
+    render: h => h(App)
 })
+
+app.$mount('#app')
+
+//console.log(app)
+//console.log(seneca)
